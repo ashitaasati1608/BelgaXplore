@@ -1,4 +1,4 @@
-package com.ashita.belgaxplore
+package com.ashita.belgaxplore.presentation.ui
 
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable

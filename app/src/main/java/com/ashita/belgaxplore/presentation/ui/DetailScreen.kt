@@ -1,4 +1,4 @@
-package com.ashita.belgaxplore
+package com.ashita.belgaxplore.presentation.ui
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import com.ashita.belgaxplore.R
 import com.ashita.belgaxplore.presentation.locationdetails.LocationDetailViewModel
 import com.ashita.belgaxplore.ui.theme.BelgaXploreTheme
 import com.ashita.belgaxplore.ui.theme.TextDesignBold14SP
@@ -120,9 +121,9 @@ fun DetailScreen(viewModel: LocationDetailViewModel = hiltViewModel()) {
                 }
 
 
-                if (state.isError.isNotBlank()) {
+                if (state.errorMessage.isNotBlank()) {
                     Text(
-                        text = state.isError,
+                        text = state.errorMessage,
                         color = MaterialTheme.colors.error,
                         textAlign = TextAlign.Center,
                         modifier = Modifier

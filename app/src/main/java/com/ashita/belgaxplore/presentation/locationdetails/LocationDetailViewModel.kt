@@ -33,7 +33,7 @@ class LocationDetailViewModel @Inject constructor(
 
                 is Resources.Error -> {
                     _state.value =
-                        LocationDetailsState(isError = result.message ?: "Unexpected error occured")
+                        LocationDetailsState(errorMessage = result.message ?: "Unexpected error occured")
                 }
                 is Resources.Success -> {
                     _state.value = LocationDetailsState(locationDetails = result.data)
