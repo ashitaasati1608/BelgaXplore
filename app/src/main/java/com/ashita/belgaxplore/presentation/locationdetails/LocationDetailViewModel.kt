@@ -4,11 +4,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ashita.belgaxplore.common.Constants.PARAM_LOCATION_ID
 import com.ashita.belgaxplore.common.Resources
 import com.ashita.belgaxplore.domain.usecase.LocationDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,12 +26,14 @@ class LocationDetailViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<String>(PARAM_LOCATION_ID)?.let { locationId ->
+            println("Location Id $locationId")
             fetchDetails(locationId)
         }
     }
 
     private fun fetchDetails(id: String) {
-        locationDetailsUseCase(id).onEach { result ->
+        viewModelScope.launch { _state.value = LocationDetailsState(locationDetails =locationDetailsUseCase(id) ) }
+        /*.onEach { result ->
             when (result) {
 
                 is Resources.Error -> {
@@ -43,6 +48,6 @@ class LocationDetailViewModel @Inject constructor(
                 }
             }
 
-        }
+        }*/
     }
 }

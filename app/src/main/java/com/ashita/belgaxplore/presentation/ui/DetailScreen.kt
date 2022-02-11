@@ -84,7 +84,7 @@ fun DetailScreen(viewModel: LocationDetailViewModel = hiltViewModel()) {
                         )
 
                         Text(
-                            text = name,
+                            text = name.orEmpty(),
                             modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp),
                             style = TextDesignBold18SP.copy(color = Color.Blue)
                         )

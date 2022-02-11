@@ -1,12 +1,15 @@
 package com.ashita.belgaxplore.presentation.locationlist
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ashita.belgaxplore.common.Resources
 import com.ashita.belgaxplore.domain.usecase.LocationsListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,22 +23,26 @@ class LocationsListViewModel @Inject constructor
         getLocationsList()
     }
 
-    private fun getLocationsList() {
-        locationsListUseCase().onEach { result ->
-            when (result) {
+    fun getLocationsList() {
+        println("View Model function got called")
+        viewModelScope.launch {
+           _state.value = LocationListState(locationsList = locationsListUseCase())
+            /*locationsListUseCase().onEach { result ->
+                when (result) {
+                    is Resources.Error -> {
+                        _state.value =
+                            LocationListState(isError = result.message ?: "Unexpected error occured")
+                    }
+                    is Resources.Success -> {
 
-                is Resources.Error -> {
-                    _state.value =
-                        LocationListState(isError = result.message ?: "Unexpected error occured")
+                    }
+                    is Resources.Loading -> {
+                        _state.value = LocationListState(isLoading = true)
+                    }
                 }
-                is Resources.Success -> {
-                    _state.value = LocationListState(locationsList = result.data.orEmpty())
-                }
-                is Resources.Loading -> {
-                    _state.value = LocationListState(isLoading = true)
-                }
-            }
+            }*/
         }
+
     }
 
     /*val locations =

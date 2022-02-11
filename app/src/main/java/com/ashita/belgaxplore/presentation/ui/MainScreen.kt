@@ -80,6 +80,7 @@ fun FetchLocationsList(
     viewModel: LocationsListViewModel = hiltViewModel()
 ) {
     val scrollState = rememberLazyListState()
+    viewModel.getLocationsList()
     val state = viewModel.locationListState.value
 
     // We save the coroutine scope where our animated scroll will be executed
@@ -90,8 +91,10 @@ fun FetchLocationsList(
             state = scrollState,
             modifier = modifier.padding(vertical = 8.dp, horizontal = 8.dp)
         ) {
-            items(items = state.locationsList) { location ->
-                Location(navController, modifier, location = location)
+            state.locationsList?.let { locationsList ->
+                items(items = locationsList) { location ->
+                    Location(navController, modifier, location = location)
+                }
             }
         }
 
@@ -140,8 +143,7 @@ fun onItemClick(location: Locations, navController: NavController) {
 private fun CardContent(modifier: Modifier, location: Locations) {
     Row(
         modifier = modifier
-            .padding(12.dp)
-            .padding(horizontal = 10.dp)
+            .padding(8.dp)
     ) {
         val painter = rememberImagePainter(
             data = location.poster,
@@ -166,7 +168,7 @@ private fun CardContent(modifier: Modifier, location: Locations) {
         Spacer(modifier = modifier.width(15.dp))
 
         Text(
-            text = location.name,
+            text = location.name.orEmpty(),
             style = TextDesignBold18SP,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,

@@ -1,6 +1,5 @@
 package com.ashita.belgaxplore.di
 
-import com.ashita.belgaxplore.common.Constants.BASE_URL
 import com.ashita.belgaxplore.data.BelgaXploreApiService
 import com.ashita.belgaxplore.domain.repository.LocationDetailsRepository
 import com.ashita.belgaxplore.domain.repository.LocationDetailsRepositoryImpl
@@ -10,8 +9,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -21,9 +18,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideBelgaExploreApi(): BelgaXploreApiService {
-        return Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build().create(BelgaXploreApiService::class.java)
+        return BelgaXploreApiService
     }
 
     @Provides
