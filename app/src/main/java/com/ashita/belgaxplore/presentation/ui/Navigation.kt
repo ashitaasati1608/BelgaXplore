@@ -16,7 +16,11 @@ fun Navigation() {
         composable(route = Screen.MainScreen.route) {
             MainScreen(navController)
         }
-
+        composable(
+            route = Screen.DetailScreen.route + "/{coinId}"
+        ) {
+            DetailScreen()
+        }
         composable(route = Screen.DetailScreen.route + "/{locationId}") {
             DetailScreen()
         }

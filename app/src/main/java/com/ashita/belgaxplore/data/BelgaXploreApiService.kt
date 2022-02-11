@@ -1,16 +1,35 @@
 package com.ashita.belgaxplore.data
 
-import retrofit2.http.GET
-import retrofit2.http.Path
+import com.ashita.belgaxplore.di.AppModule.provideFirebaseInstance
+import com.ashita.belgaxplore.domain.data.Locations
+import kotlinx.coroutines.tasks.await
 
-interface BelgaXploreApiService {
+object BelgaXploreApiService {
 
-    @GET("v1/location/{id}")
-    suspend fun getLocationDetailsById(@Path("id") id: String): LocationsDto
+    suspend fun getCountryLocationsList(): MutableList<Locations> {
+        var data = mutableListOf<Locations>()
+        provideFirebaseInstance().collection("locations")
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    data.add(document.toObject(Locations::class.java))
+                }
+            }.addOnFailureListener {
+                //ToDo : Return Error
+            }.addOnCompleteListener {
+                data = it.result.toObjects(Locations::class.java)
+            }.await()
 
-    @GET("v1/location")
-    suspend fun getCountryLocationsList(): List<LocationsDto>
+        return data
+    }
 
-    @GET("")
-    suspend fun getCountriesList(): List<Country>
+    suspend fun getLocationDetailsById(id: String): Locations? {
+        var locationsDto: Locations? = null
+        provideFirebaseInstance().collection("locations").get().addOnSuccessListener {
+            locationsDto = it.toObjects(Locations::class.java).firstOrNull { it.id == id }
+        }.addOnCanceledListener {
+            locationsDto = null
+        }.await()
+        return locationsDto
+    }
 }

@@ -6,6 +6,7 @@ import javax.inject.Inject
 class LocationsListRepositoryImpl @Inject constructor(private val apiService: BelgaXploreApiService) :
     LocationsListRepository {
 
-    override suspend fun getLocationsList() = apiService.getCountryLocationsList()
+    override suspend fun getLocationsList() =
+        apiService.getCountryLocationsList()
 
 }

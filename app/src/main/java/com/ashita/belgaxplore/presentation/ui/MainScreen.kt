@@ -28,27 +28,27 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.ashita.belgaxplore.R
 import com.ashita.belgaxplore.domain.data.Locations
+import com.ashita.belgaxplore.presentation.locationlist.LocationListState
 import com.ashita.belgaxplore.presentation.locationlist.LocationsListViewModel
 import com.ashita.belgaxplore.ui.theme.TextDesignBold18SP
 
 @ExperimentalCoilApi
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navController: NavController, viewModel: LocationsListViewModel = hiltViewModel()) {
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
         LocationsList(
-            navController
+            navController, viewModel.locationListState.value
         )
     }
 }
 
 @ExperimentalCoilApi
 @Composable
-fun LocationsList(navController: NavController) {
-
+fun LocationsList(navController: NavController, locationsListState: LocationListState) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,7 +68,11 @@ fun LocationsList(navController: NavController) {
             )
         }
     ) { innerPadding ->
-        FetchLocationsList(navController = navController, Modifier.padding(innerPadding))
+        FetchLocationsList(
+            navController = navController,
+            Modifier.padding(innerPadding),
+            locationsListState
+        )
     }
 }
 
@@ -77,11 +81,11 @@ fun LocationsList(navController: NavController) {
 fun FetchLocationsList(
     navController: NavController,
     modifier: Modifier,
-    viewModel: LocationsListViewModel = hiltViewModel()
+    locationsListState: LocationListState
+
 ) {
     val scrollState = rememberLazyListState()
-    val state = viewModel.locationListState.value
-
+    println("data in Main Screen 3 ${locationsListState.locationsList}")
     // We save the coroutine scope where our animated scroll will be executed
     val coroutineScope = rememberCoroutineScope()
 
@@ -90,14 +94,16 @@ fun FetchLocationsList(
             state = scrollState,
             modifier = modifier.padding(vertical = 8.dp, horizontal = 8.dp)
         ) {
-            items(items = state.locationsList) { location ->
-                Location(navController, modifier, location = location)
+            locationsListState.locationsList?.let { locationsList ->
+                items(items = locationsList) { location ->
+                    Location(navController, modifier, location = location)
+                }
             }
         }
 
-        if (state.isError.isNotBlank()) {
+        if (locationsListState.isError.isNotBlank()) {
             Text(
-                text = state.isError,
+                text = locationsListState.isError,
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Center,
                 modifier = modifier
@@ -107,7 +113,7 @@ fun FetchLocationsList(
             )
         }
 
-        if (state.isLoading) {
+        if (locationsListState.isLoading) {
             CircularProgressIndicator(modifier = modifier.align(Alignment.Center))
         }
     }
@@ -140,8 +146,7 @@ fun onItemClick(location: Locations, navController: NavController) {
 private fun CardContent(modifier: Modifier, location: Locations) {
     Row(
         modifier = modifier
-            .padding(12.dp)
-            .padding(horizontal = 10.dp)
+            .padding(8.dp)
     ) {
         val painter = rememberImagePainter(
             data = location.poster,
@@ -166,7 +171,7 @@ private fun CardContent(modifier: Modifier, location: Locations) {
         Spacer(modifier = modifier.width(15.dp))
 
         Text(
-            text = location.name,
+            text = location.name.orEmpty(),
             style = TextDesignBold18SP,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
