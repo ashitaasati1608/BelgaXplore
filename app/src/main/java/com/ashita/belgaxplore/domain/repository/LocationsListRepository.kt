@@ -4,5 +4,5 @@ import com.ashita.belgaxplore.domain.data.Locations
 
 interface LocationsListRepository {
 
-    suspend fun getLocationsList(): List<Locations>?
+    suspend fun getLocationsList(): List<Locations>
 }

@@ -5,5 +5,5 @@ import com.ashita.belgaxplore.domain.data.Locations
 data class LocationDetailsState(
     val errorMessage: String = "",
     val isLoading: Boolean = false,
-    val locationDetails: Locations?= null
+    val locationDetails: Locations? = null
 )

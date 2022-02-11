@@ -25,7 +25,7 @@ val TextDesignBold18SP = TextStyle(
 )
 
 val TextDesignNormal14SP = TextStyle(
-color = Color.Black,
-fontWeight = FontWeight.Normal,
-fontSize = 14.sp
+    color = Color.Black,
+    fontWeight = FontWeight.Normal,
+    fontSize = 14.sp
 )

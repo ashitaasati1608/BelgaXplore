@@ -5,6 +5,7 @@ import com.ashita.belgaxplore.domain.repository.LocationDetailsRepository
 import com.ashita.belgaxplore.domain.repository.LocationDetailsRepositoryImpl
 import com.ashita.belgaxplore.domain.repository.LocationsListRepository
 import com.ashita.belgaxplore.domain.repository.LocationsListRepositoryImpl
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +32,11 @@ object AppModule {
     @Singleton
     fun provideLocationDetailsRepository(api: BelgaXploreApiService): LocationDetailsRepository {
         return LocationDetailsRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseInstance(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 }

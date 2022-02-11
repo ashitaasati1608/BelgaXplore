@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">BelgaXplore</string>
     <string name="image_content_desc">Painter Image</string>
+    <string name="click_here">Click here</string>
+    <string name="check_on_maps">\"Check on Maps: \"</string>
 </resources>

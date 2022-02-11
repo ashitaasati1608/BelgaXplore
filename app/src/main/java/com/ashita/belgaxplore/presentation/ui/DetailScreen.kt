@@ -1,6 +1,7 @@
 package com.ashita.belgaxplore.presentation.ui
 
-import android.util.Log
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -15,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +26,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
@@ -32,6 +36,7 @@ import com.ashita.belgaxplore.ui.theme.BelgaXploreTheme
 import com.ashita.belgaxplore.ui.theme.TextDesignBold14SP
 import com.ashita.belgaxplore.ui.theme.TextDesignBold18SP
 import com.ashita.belgaxplore.ui.theme.TextDesignNormal14SP
+
 
 @Composable
 fun DetailScreen(viewModel: LocationDetailViewModel = hiltViewModel()) {
@@ -145,15 +150,15 @@ fun DetailScreen(viewModel: LocationDetailViewModel = hiltViewModel()) {
 
 @Composable
 fun AnnotatedClickableText(url: String) {
+    val context = LocalContext.current
     val annotatedText = buildAnnotatedString {
-
         withStyle(
             style = SpanStyle(
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp
             )
-        ) { append("Check on Maps: ") }
+        ) { append(stringResource(R.string.check_on_maps)) }
 
         // We attach this *URL* annotation to the following content
         // until `pop()` is called
@@ -169,7 +174,7 @@ fun AnnotatedClickableText(url: String) {
                 fontSize = 14.sp
             )
         ) {
-            append("Click here")
+            append(stringResource(R.string.click_here))
         }
 
         pop()
@@ -185,8 +190,13 @@ fun AnnotatedClickableText(url: String) {
                 end = offset
             )
                 .firstOrNull()?.let { annotation ->
-                    // If yes, we log its value
-                    Log.d("Clicked URL", annotation.item)
+                    startActivity(
+                        context, Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(annotation.item)
+                        ), null
+                    )
+
                 }
         },
         modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)

@@ -6,5 +6,5 @@ import com.ashita.belgaxplore.domain.data.Locations
 data class LocationListState(
     val isError: String = "",
     val isLoading: Boolean = false,
-    val locationsList: List<Locations>? = emptyList()
+    val locationsList: List<Locations> = emptyList()
 )
